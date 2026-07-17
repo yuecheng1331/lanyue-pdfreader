@@ -1,0 +1,225 @@
+<Window x:Class="LocalPdfReader.App.TranslationPreferencesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="翻译偏好"
+        Icon="Assets/LanyuePDF.ico"
+        Width="760"
+        Height="600"
+        MinWidth="640"
+        MinHeight="500">
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="20" FontWeight="SemiBold" Text="翻译偏好" />
+        <TabControl Grid.Row="1" Margin="0,12,0,0">
+            <TabItem Header="当次翻译">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="0,0,8,0">
+                            <TextBlock Margin="0,0,0,4" Text="翻译风格" />
+                            <ComboBox ItemsSource="{Binding StyleOptions}"
+                                      DisplayMemberPath="DisplayName"
+                                      SelectedItem="{Binding SelectedStyleOption, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Margin="0,0,0,4" Text="目标语言" />
+                            <ComboBox ItemsSource="{Binding TargetLanguageOptions}"
+                                      DisplayMemberPath="Label"
+                                      SelectedValuePath="Value"
+                                      SelectedValue="{Binding TargetLanguage}" />
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Grid.Row="1"
+                               Margin="0,16,0,4"
+                               FontWeight="SemiBold"
+                               Text="本次额外要求" />
+                    <TextBox Grid.Row="2"
+                             Padding="8"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
+                             Text="{Binding CustomInstruction, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="风格提示词">
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ListBox ItemsSource="{Binding ManagedStyleOptions}"
+                             SelectedItem="{Binding SelectedManagedStyle, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,5">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding DisplayName}" TextWrapping="Wrap" />
+                                    <TextBlock Margin="0,3,0,0"
+                                               FontSize="11"
+                                               Foreground="#FF6B7280"
+                                               Text="{Binding KindText}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Foreground="#FF6B7280"
+                                   Text="{Binding StylePromptStatusText}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="1"
+                                   Margin="0,8,0,0"
+                                   Foreground="#FF6B7280"
+                                   Text="{Binding SelectedManagedStyleKindText}"
+                                   TextWrapping="Wrap" />
+                        <Grid Grid.Row="2" Margin="0,12,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBox Padding="7"
+                                     Text="{Binding ManagedStyleName, UpdateSourceTrigger=PropertyChanged}"
+                                     ToolTip="风格名称" />
+                            <TextBox Grid.Row="1"
+                                     Margin="0,8,0,0"
+                                     Padding="8"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     VerticalScrollBarVisibility="Auto"
+                                     Text="{Binding ManagedStylePrompt, UpdateSourceTrigger=PropertyChanged}"
+                                     ToolTip="提示词内容" />
+                        </Grid>
+                        <Grid Grid.Row="3" Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Padding="8"
+                                     MinHeight="56"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     VerticalScrollBarVisibility="Auto"
+                                     Text="{Binding StylePromptRequirement, UpdateSourceTrigger=PropertyChanged}"
+                                     ToolTip="描述希望 DeepSeek 生成的翻译风格提示词" />
+                            <Button Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    Padding="12,6"
+                                    VerticalAlignment="Top"
+                                    Command="{Binding GenerateStylePromptCommand}">生成提示词</Button>
+                        </Grid>
+                        <WrapPanel Grid.Row="4" Margin="0,12,0,0" HorizontalAlignment="Right">
+                            <Button Padding="12,6" Command="{Binding AddTranslationStyleCommand}">新增为自定义</Button>
+                            <Button Margin="8,0,0,0"
+                                    Padding="12,6"
+                                    Command="{Binding SaveTranslationStyleCommand}">保存修改</Button>
+                            <Button Margin="8,0,0,0"
+                                    Padding="12,6"
+                                    Command="{Binding DeleteTranslationStyleCommand}">删除/隐藏</Button>
+                            <Button Margin="8,0,0,0"
+                                    Padding="12,6"
+                                    Command="{Binding RestoreTranslationStyleCommand}">恢复预设</Button>
+                        </WrapPanel>
+                    </Grid>
+                    <TextBlock Grid.Row="1"
+                               Grid.ColumnSpan="3"
+                               Margin="0,12,0,0"
+                               Foreground="#FF6B7280"
+                               Text="提示词属于高级设置，修改后的翻译效果无法预先保证，需要结合实际文档多次调整。"
+                               TextWrapping="Wrap" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="样本偏好">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ListBox ItemsSource="{Binding HistoryEntries}"
+                             SelectedItem="{Binding SelectedHistoryEntry, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,5">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Preview}" TextWrapping="Wrap" />
+                                    <TextBlock Margin="0,3,0,0"
+                                               FontSize="11"
+                                               Foreground="#FF6B7280"
+                                               Text="{Binding Summary}"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <WrapPanel Grid.Row="1" Margin="0,10,0,0" HorizontalAlignment="Right">
+                        <Button Padding="12,6" Command="{Binding MarkHistoryPreferredCommand}">参考样本</Button>
+                        <Button Margin="8,0,0,0"
+                                Padding="12,6"
+                                Command="{Binding MarkHistoryRejectedCommand}">避开样本</Button>
+                        <Button Margin="8,0,0,0"
+                                Padding="12,6"
+                                Command="{Binding ClearHistorySampleCommand}">取消标记</Button>
+                        <Button Margin="8,0,0,0"
+                                Padding="12,6"
+                                Command="{Binding DeleteHistoryEntryCommand}">删除记录</Button>
+                    </WrapPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="术语表">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Padding="7"
+                                 Text="{Binding GlossarySourceTerm, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="原术语" />
+                        <TextBox Grid.Column="1"
+                                 Margin="8,0,0,0"
+                                 Padding="7"
+                                 Text="{Binding GlossaryTargetTerm, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="目标译法" />
+                        <Button Grid.Column="2"
+                                Margin="8,0,0,0"
+                                Padding="12,6"
+                                Command="{Binding AddGlossaryEntryCommand}">保存</Button>
+                    </Grid>
+                    <ListBox Grid.Row="1"
+                             Margin="0,10,0,0"
+                             ItemsSource="{Binding GlossaryEntries}"
+                             SelectedItem="{Binding SelectedGlossaryEntry, Mode=TwoWay}"
+                             DisplayMemberPath="DisplayText" />
+                    <WrapPanel Grid.Row="2" Margin="0,10,0,0" HorizontalAlignment="Right">
+                        <Button Padding="12,6" Command="{Binding DeleteGlossaryEntryCommand}">删除选中术语</Button>
+                    </WrapPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

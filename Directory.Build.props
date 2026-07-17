@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <!-- V1.0 的产品版本只在这里维护，项目文件和发布脚本均读取此值。 -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>澜阅 PDF</Product>
+    <BuildCommit Condition="'$(BuildCommit)' == ''">local</BuildCommit>
+    <BuildTimestampUtc Condition="'$(BuildTimestampUtc)' == ''">local</BuildTimestampUtc>
+    <InformationalVersion>$(Version)+$(BuildCommit)</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="BuildCommit" Value="$(BuildCommit)" />
+    <AssemblyMetadata Include="BuildTimestampUtc" Value="$(BuildTimestampUtc)" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,42 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio and user-specific files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Test output and coverage
+[Tt]est[Rr]esults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Local application data, caches, and logs
+artifacts/
+cache/
+*.cache
+*.log
+LocalPdfReader.settings.json
+settings.local.json
+appsettings.Local.json
+
+# Secrets and local credentials
+*.secrets.json
+secrets.json
+*.key
+*.pfx
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>LanyuePDF</AssemblyName>
+    <ApplicationIcon>Assets\LanyuePDF.ico</ApplicationIcon>
+    <!-- PdfWorker is only a build-order dependency; it is published separately below. -->
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+    <PdfWorkerTargetFramework>net10.0</PdfWorkerTargetFramework>
+    <PdfWorkerBuildOutput>$(MSBuildThisFileDirectory)..\LocalPdfReader.PdfWorker\bin\$(Configuration)\$(PdfWorkerTargetFramework)\</PdfWorkerBuildOutput>
+    <PdfWorkerBuildOutput Condition="'$(RuntimeIdentifier)' != ''">$(MSBuildThisFileDirectory)..\LocalPdfReader.PdfWorker\bin\$(Configuration)\$(PdfWorkerTargetFramework)\$(RuntimeIdentifier)\</PdfWorkerBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\LanyuePDF.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LocalPdfReader.Application\LocalPdfReader.Application.csproj" />
+    <ProjectReference Include="..\LocalPdfReader.Infrastructure\LocalPdfReader.Infrastructure.csproj" />
+    <ProjectReference Include="..\LocalPdfReader.PdfWorker\LocalPdfReader.PdfWorker.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.9" />
+  </ItemGroup>
+
+  <Target Name="CopyPdfWorkerOutput" AfterTargets="Build">
+    <ItemGroup>
+      <PdfWorkerOutput Include="$(PdfWorkerBuildOutput)**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PdfWorkerOutput)" DestinationFiles="@(PdfWorkerOutput->'$(OutDir)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- The PDF process is a separate executable and must also be self-contained in the final package. -->
+  <Target Name="PublishPdfWorker" AfterTargets="Publish"
+          Condition="'$(RuntimeIdentifier)' == 'win-x64' and '$(SelfContained)' == 'true'">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\LocalPdfReader.PdfWorker\LocalPdfReader.PdfWorker.csproj"
+             Targets="Publish"
+             BuildInParallel="false"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=$(RuntimeIdentifier);SelfContained=true;PublishSingleFile=false;PublishTrimmed=false;DebugType=None;DebugSymbols=false;PublishProfile=;PublishDir=$(PublishDir)" />
+  </Target>
+
+</Project>

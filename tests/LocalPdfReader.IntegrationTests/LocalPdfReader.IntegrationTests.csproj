@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="PDFiumCore" Version="151.0.7920" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LocalPdfReader.App\LocalPdfReader.App.csproj" />
+    <ProjectReference Include="..\..\src\LocalPdfReader.Application\LocalPdfReader.Application.csproj" />
+    <ProjectReference Include="..\..\src\LocalPdfReader.Infrastructure\LocalPdfReader.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\LocalPdfReader.PdfProtocol\LocalPdfReader.PdfProtocol.csproj" />
+    <ProjectReference Include="..\..\src\LocalPdfReader.PdfWorker\LocalPdfReader.PdfWorker.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="CopyPdfWorkerOutput" AfterTargets="Build">
+    <ItemGroup>
+      <PdfWorkerOutput Include="$(MSBuildThisFileDirectory)..\..\src\LocalPdfReader.PdfWorker\bin\$(Configuration)\net10.0\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PdfWorkerOutput)" DestinationFiles="@(PdfWorkerOutput->'$(OutDir)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

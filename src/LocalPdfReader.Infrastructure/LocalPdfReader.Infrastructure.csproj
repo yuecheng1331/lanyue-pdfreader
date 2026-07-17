@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LocalPdfReader.Application\LocalPdfReader.Application.csproj" />
+    <ProjectReference Include="..\LocalPdfReader.Domain\LocalPdfReader.Domain.csproj" />
+    <ProjectReference Include="..\LocalPdfReader.PdfProtocol\LocalPdfReader.PdfProtocol.csproj" />
+    <ProjectReference Include="..\LocalPdfReader.Shared\LocalPdfReader.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9" />
+    <!-- Microsoft.Data.Sqlite 10.0.9 默认解析到有高危公告的 2.1.11。 -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.12" />
+  </ItemGroup>
+
+</Project>
