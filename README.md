@@ -4,15 +4,24 @@
 
 #使用方式
 
+
 将packages的V1.0版本压缩包下载，本地解压后启动LanyuePDF.exe即可使用
 
 翻译设置
+
+
 API地址：https://api.deepseek.com
+
 模型：deepseek-v4-flash
+
 目标语言（默认中文兼容多个语言）：zh-CN
+
 超时时间：60
+
 APIkey（在windows凭据中以LocalPdfReader.DeepSeek.ApiKey名称存储）：自行在deepseek官网获取https://platform.deepseek.com
+
 缓存上线（0-10000）：500
+
 
 # 澜阅 PDF
 
